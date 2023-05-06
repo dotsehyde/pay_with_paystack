@@ -166,9 +166,33 @@ class _PaystackPayNowState extends State<PaystackPayNow> {
                 javascriptMode: JavascriptMode.unrestricted,
               ));
         } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+          var data = jsonDecode((snapshot.error as http.Response).body);
+          return Scaffold(
+              body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error,
+                  color: Colors.grey[300],
+                  size: 30,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    'Error Occurred',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                  ),
+                ),
+                Text(
+                  data["message"] ?? snapshot.error.toString(),
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ));
         }
-        return const Center(child: CircularProgressIndicator());
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }
